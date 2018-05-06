@@ -21,4 +21,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_menu_ucitel">MenuUcitelActivity</string>
+    <array name="zoznam_serii">
+        <item>fafaf</item>
+        <item>olaf</item>
+        <item>feaf</item>
+        <item>feafe</item>
+    </array>
 </resources>

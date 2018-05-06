@@ -1,6 +1,7 @@
 package sk.upjs.vma.formativ;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
@@ -14,27 +15,31 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
     // UI references.
-    private EditText meno;
-    private EditText heslo;
+    private EditText menoEditText;
+    private EditText hesloEditText;
     private View mProgressView;
     private LinearLayout loginLinearLayout;
     private static final int REQUEST_CODE = 8;
     private boolean pristup = false;
+    private String prihlasovacie_meno;
+    private String heslo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         loginLinearLayout = findViewById(R.id.login_linear_layout);
         mProgressView = findViewById(R.id.login_progress);
-        meno =  findViewById(R.id.text_Meno);
-        heslo = findViewById(R.id.text_Heslo);
+        menoEditText =  findViewById(R.id.text_Meno);
+        hesloEditText = findViewById(R.id.text_Heslo);
 
         Button prihlasitButton = findViewById(R.id.prihlasit_Button);
         prihlasitButton.setOnClickListener(new OnClickListener() {
@@ -45,77 +50,82 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean povolenie(){
-        if(!pristup) {
-            Snackbar.make(loginLinearLayout, "Aplikacia bude vyuzivat informacie o sieti.", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("ok", new OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            pristup = true;
-                        }
-                    }).show();
-        }
-        return pristup;
-    }
-
     private void attemptLogin() {
         // Reset chyb.
-        meno.setError(null);
-        heslo.setError(null);
+        menoEditText.setError(null);
+        hesloEditText.setError(null);
 
-        String email = meno.getText().toString();
-        String password = heslo.getText().toString();
+        prihlasovacie_meno = this.menoEditText.getText().toString();
+        heslo = hesloEditText.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Kontrola vyplnenia a dlzky hesla
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            heslo.setError(getString(R.string.error_invalid_password));
-            focusView = heslo;
+        if (TextUtils.isEmpty(heslo)) {
+            hesloEditText.setError(getString(R.string.error_invalid_password));
+            focusView = hesloEditText;
             cancel = true;
         }
 
         // Kontrola vyplnenia prihlasovacieho mena
-        if (TextUtils.isEmpty(email)) {
-            meno.setError(getString(R.string.error_field_required));
-            focusView = meno;
+        if (TextUtils.isEmpty(prihlasovacie_meno)) {
+            this.menoEditText.setError(getString(R.string.error_field_required));
+            focusView = this.menoEditText;
             cancel = true;
         }
 
         if (cancel) {
             // Zameranie na posledne chybne policko
+            Toast.makeText(this,"Udaje su nespravne",Toast.LENGTH_LONG).show();
             focusView.requestFocus();
         } else {
             // Spustenie progressu
-            showProgress(true);
+            showProgress();
         }
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
+    private boolean isPasswordValid(String password) { return password.length() > 4; }
 
 
-    private void showProgress(final boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        loginLinearLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+    private void showProgress() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        mProgressView.setVisibility(View.VISIBLE);
+        loginLinearLayout.setVisibility(View.GONE);
 
         ConnectivityManager cm =
                 (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = null;
+        if (cm != null) {
+            activeNetwork = cm.getActiveNetworkInfo();
+        }
+
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
         if(isConnected){
-
-
+            PrihlasenieAsyncTask prihlasenieAsyncTask = new PrihlasenieAsyncTask(this);
+            prihlasenieAsyncTask.execute(prihlasovacie_meno,heslo);
         }else{
-            mProgressView.setVisibility(show ? View.GONE : View.VISIBLE);
-            loginLinearLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.setVisibility(View.GONE);
+            loginLinearLayout.setVisibility(View.VISIBLE);
             Snackbar.make(loginLinearLayout,"Žiadne internetové pripojenie",Snackbar.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+    public void prihlasPouzivatela(Pouzivatel pouzivatel){
+        if(pouzivatel == null){
+            mProgressView.setVisibility(View.GONE);
+            loginLinearLayout.setVisibility(View.VISIBLE);
+            Snackbar.make(loginLinearLayout,"Ziaden pouzivatel",Snackbar.LENGTH_LONG)
+                    .show();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        }else{
+            mProgressView.setVisibility(View.GONE);
+            loginLinearLayout.setVisibility(View.VISIBLE);
+            Snackbar.make(loginLinearLayout,pouzivatel.getMeno(),Snackbar.LENGTH_LONG)
                     .show();
         }
     }
