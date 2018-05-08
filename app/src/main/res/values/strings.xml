@@ -22,10 +22,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_menu_ucitel">MenuUcitelActivity</string>
-    <array name="zoznam_serii">
-        <item>fafaf</item>
-        <item>olaf</item>
-        <item>feaf</item>
-        <item>feafe</item>
-    </array>
+    <string name="priezvisko">Priezvisko</string>
+    <string name="zopakovat_heslo">Zopakovat heslo</string>
+    <string name="typ">Typy Pouzivatela</string>
+    <string name="registrovat">Registrovat</string>
+    <string-array name="typy_pouzivatelov">
+        <item>Admin</item>
+        <item>Ucitel</item>
+        <item>Student</item>
+    </string-array>
 </resources>

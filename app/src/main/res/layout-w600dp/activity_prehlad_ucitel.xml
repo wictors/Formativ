@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false">
+
+    <fragment
+        android:id="@+id/zoznam_serii_fragment"
+        class="sk.upjs.vma.formativ.ActivityUcitel.ZoznamSeriiUcitelFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_zoznam_serii_ucitel"/>
+
+    <fragment
+        android:id="@+id/detail_serie_fragment"
+        class="sk.upjs.vma.formativ.ActivityUcitel.DetailSerieUcitelFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        tools:layout="@layout/fragment_detail_serie_ucitel"/>
+
+</LinearLayout>
