@@ -7,7 +7,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class RetroFitFactory {
 
     private static Retrofit getRetrofit(){
-        String url = "http://192.168.0.100:80/formativ/";
+        String url = "http://192.168.0.101:80/formativ/";
 
         return new Retrofit.Builder()
                 .baseUrl(url)

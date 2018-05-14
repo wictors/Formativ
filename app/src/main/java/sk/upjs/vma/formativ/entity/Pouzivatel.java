@@ -14,8 +14,7 @@ public class Pouzivatel implements Serializable {
     public Pouzivatel() {
     }
 
-    public Pouzivatel(int id, String meno, String priezvisko, String prihlasovacie_meno, String heslo, String rola) {
-        this.id = id;
+    public Pouzivatel(String meno, String priezvisko, String prihlasovacie_meno, String heslo, String rola) {
         this.meno = meno;
         this.priezvisko = priezvisko;
         this.prihlasovacie_meno = prihlasovacie_meno;

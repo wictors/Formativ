@@ -3,6 +3,7 @@ package sk.upjs.vma.formativ.ActivityUcitel;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import sk.upjs.vma.formativ.KliknutieSeriaListener;
 import sk.upjs.vma.formativ.R;
@@ -44,6 +45,7 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
 
     @Override
     public void klikSeria(Seria seria) {
-        Log.d("TAG_SERIA", seria.getNazov());
+        Toast.makeText(this, seria.getNazov(), Toast.LENGTH_LONG).show();
+
     }
 }

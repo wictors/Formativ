@@ -2,7 +2,10 @@ package sk.upjs.vma.formativ.prihlasenie;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import retrofit2.Call;
 import sk.upjs.vma.formativ.DB.RetroFitFactory;
@@ -34,7 +37,11 @@ public class PrihlasenieAsyncTask extends AsyncTask<String,Void,Pouzivatel> {
             List<Pouzivatel> pouzivatelia = vystup.execute().body();
             if (pouzivatelia != null) {
                 for (Pouzivatel pouzivatel : pouzivatelia) {
-                    if (pouzivatel.getHeslo().equals(heslo)) { return pouzivatel; }
+                    Log.d("OVEROVANIE", "Zacinam kontrolu hesla");
+                    if (kontrolaHesla(heslo,pouzivatel.getHeslo())) {
+                        Log.d("OVEROVANIE", "Skoncil kontrolu hesla");
+                        return pouzivatel;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -46,6 +53,12 @@ public class PrihlasenieAsyncTask extends AsyncTask<String,Void,Pouzivatel> {
     @Override
     protected void onPostExecute(Pouzivatel pouzivatel) {
         listener.prihlasPouzivatela(pouzivatel);
+    }
+
+    private static boolean kontrolaHesla(String vlozeneHeslo, String hash) {
+        boolean overenie = false;
+        overenie = BCrypt.checkpw(vlozeneHeslo,hash);
+        return(overenie);
     }
 }
 

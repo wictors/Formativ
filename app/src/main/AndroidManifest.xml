@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ActivityUcitel.PrehladUcitelActivity" />
+        <activity android:name=".Admin.RegistraciaActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".Admin.AdminActivity"></activity>
     </application>
 

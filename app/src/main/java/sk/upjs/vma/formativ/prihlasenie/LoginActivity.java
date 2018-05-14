@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import sk.upjs.vma.formativ.ActivityUcitel.PrehladUcitelActivity;
 import sk.upjs.vma.formativ.Admin.AdminActivity;
+import sk.upjs.vma.formativ.Admin.RegistraciaActivity;
 import sk.upjs.vma.formativ.R;
 import sk.upjs.vma.formativ.entity.Pouzivatel;
 

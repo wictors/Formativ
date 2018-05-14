@@ -31,4 +31,9 @@
         <item>Ucitel</item>
         <item>Student</item>
     </string-array>
+    <string-array name="pouzivatelia">
+        <item>vseno</item>
+        <item>rziadne</item>
+        <item>ttest</item>
+    </string-array>
 </resources>
