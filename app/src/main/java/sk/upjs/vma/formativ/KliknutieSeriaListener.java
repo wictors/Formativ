@@ -4,4 +4,5 @@ import sk.upjs.vma.formativ.entity.Seria;
 
 public interface KliknutieSeriaListener {
     void klikSeria(Seria seria);
+    void novaSeria();
 }

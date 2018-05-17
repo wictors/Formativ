@@ -72,13 +72,6 @@ public class Pouzivatel implements Serializable {
 
     @Override
     public String toString() {
-        return "Pouzivatel{" +
-                "id=" + id +
-                ", meno='" + meno + '\'' +
-                ", priezvisko='" + priezvisko + '\'' +
-                ", prihlasovacie_meno='" + prihlasovacie_meno + '\'' +
-                ", heslo='" + heslo + '\'' +
-                ", rola='" + rola + '\'' +
-                '}';
+        return prihlasovacie_meno;
     }
 }

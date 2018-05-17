@@ -114,8 +114,6 @@ public class RegistraciaActivity extends AppCompatActivity implements RegistrujL
     }
 
     private void hotovo() {
-        Intent intent = new Intent(this,AdminActivity.class);
-        startActivity(intent);
         finish();
     }
 

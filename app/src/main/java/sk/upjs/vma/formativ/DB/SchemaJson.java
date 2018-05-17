@@ -21,4 +21,6 @@ public interface SchemaJson {
     @POST("registracia.php")
     Call<Boolean> registruj(@Body Pouzivatel pouzivatel);
 
+    @GET("zoznam_pouzivatelov.php")
+    Call<List<Pouzivatel>> daj_zoznam_pouzivatelov();
 }
