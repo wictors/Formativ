@@ -1,4 +1,4 @@
-package sk.upjs.vma.formativ;
+package sk.upjs.vma.formativ.Admin;
 
 
 import sk.upjs.vma.formativ.entity.Pouzivatel;

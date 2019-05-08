@@ -17,6 +17,7 @@ public abstract class AbstractObjectLoader<R> extends AsyncTaskLoader<R> {
         super(context);
     }
 
+
     @Override
     public void deliverResult(R result) {
         if (isReset()) {

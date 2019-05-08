@@ -9,8 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import sk.upjs.vma.formativ.ActivityUcitel.ZoznamSeriiUcitelFragment;
-import sk.upjs.vma.formativ.KliknutiePouzivatelListener;
 import sk.upjs.vma.formativ.R;
 import sk.upjs.vma.formativ.entity.Pouzivatel;
 import sk.upjs.vma.formativ.prihlasenie.LoginActivity;

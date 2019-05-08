@@ -3,20 +3,18 @@ package sk.upjs.vma.formativ.entity;
 
 import java.io.Serializable;
 
-public class
-Seria implements Serializable {
+public class Seria implements Serializable {
 
     private int id;
     private String nazov;
     private String spustena;
 
-    public Seria(int id, String nazov, String spustena) {
-        this.id = id;
-        this.nazov = nazov;
-        this.spustena = spustena;
+    public Seria() {
     }
 
-    public Seria() {
+    public Seria(String nazov, String spustena) {
+        this.nazov = nazov;
+        this.spustena = spustena;
     }
 
     public int getId() {
@@ -35,7 +33,7 @@ Seria implements Serializable {
         this.nazov = nazov;
     }
 
-    public String isSpustena() {
+    public String getSpustena() {
         return spustena;
     }
 

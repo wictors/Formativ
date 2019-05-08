@@ -7,8 +7,11 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import sk.upjs.vma.formativ.entity.Odpoved;
+import sk.upjs.vma.formativ.entity.Otazka;
 import sk.upjs.vma.formativ.entity.Pouzivatel;
 import sk.upjs.vma.formativ.entity.Seria;
+import sk.upjs.vma.formativ.entity.UspesnostSerie;
 
 public interface SchemaJson {
 
@@ -23,4 +26,34 @@ public interface SchemaJson {
 
     @GET("zoznam_pouzivatelov.php")
     Call<List<Pouzivatel>> daj_zoznam_pouzivatelov();
+
+    @POST("nova_seria.php")
+    Call<List<Seria>> vytvor_seriu(@Body Seria seria, @Query("id") int id);
+
+//    @POST("otazkyNaVyplnenie.php")
+//    Call<List<Otazka>> vyplnitOtazky(@Body Seria seria, @Query("id") int id);
+
+    @GET("zoznam_otazok.php")
+    Call<List<Otazka>> daj_zoznam_otazok(@Query("id") int idSerie, @Query("pouzivatel") int idPouzivatel);
+
+    @POST("pridajOtazku.php")
+    Call<Boolean> pridajOtazku(@Body Otazka otazka);
+
+    @POST("updateSeria.php")
+    Call<Boolean> updateSeria(@Body Seria seria);
+
+    @POST("updateSpustena.php")
+    Call<Boolean> updateSpustena(@Body Seria seria);
+
+    @POST("pridajSeriuStudent.php")
+    Call<Boolean> pridajSeriuStudent(@Query("seria") int cislo, @Query("pouzivatel") int id);
+
+    @POST("odpovedaj.php")
+    Call<Boolean> odpovedaj(@Body Odpoved odpoved);
+
+    @POST("uspesnostSerie.php")
+    Call<Boolean> uspesnostSerie(@Body UspesnostSerie uspesnostSerie);
+
+    @GET("uspesnosti.php")
+    Call<List<UspesnostSerie>> dajUspesnosti(@Query("seria") int id);
 }

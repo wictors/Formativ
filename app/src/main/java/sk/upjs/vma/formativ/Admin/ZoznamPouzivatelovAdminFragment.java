@@ -3,7 +3,6 @@ package sk.upjs.vma.formativ.Admin;
 
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -18,7 +17,6 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import sk.upjs.vma.formativ.KliknutiePouzivatelListener;
 import sk.upjs.vma.formativ.PouzivatelListLoader;
 import sk.upjs.vma.formativ.R;
 import sk.upjs.vma.formativ.entity.Pouzivatel;

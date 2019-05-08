@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import sk.upjs.vma.formativ.ActivityStudent.Prehlad_Student;
 import sk.upjs.vma.formativ.ActivityUcitel.PrehladUcitelActivity;
 import sk.upjs.vma.formativ.Admin.PrehladAdminActivity;
 import sk.upjs.vma.formativ.Admin.RegistraciaActivity;
@@ -134,7 +135,10 @@ public class LoginActivity extends AppCompatActivity implements PrihlasPouzivate
                 finish();
             }
             if(pouzivatel.getRola().equals("S")){
-
+                Intent intent = new Intent(LoginActivity.this, Prehlad_Student.class);
+                intent.putExtra("Pouzivatel", pouzivatel);
+                startActivity(intent);
+                finish();
             }
             if(pouzivatel.getRola().equals("A")){
                 Intent intent = new Intent(LoginActivity.this, PrehladAdminActivity.class);

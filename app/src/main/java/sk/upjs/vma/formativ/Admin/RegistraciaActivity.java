@@ -35,7 +35,7 @@ public class RegistraciaActivity extends AppCompatActivity implements RegistrujL
     private String heslo2;
     private String typ;
 
-    private static int generovanieSoli = 12;
+    private static int generovanieSoli = 5;
     private ConnectivityManager cm;
 
     @Override

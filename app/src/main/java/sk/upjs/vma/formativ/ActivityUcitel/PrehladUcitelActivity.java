@@ -1,31 +1,40 @@
 package sk.upjs.vma.formativ.ActivityUcitel;
 
-import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import sk.upjs.vma.formativ.KliknutieSeriaListener;
+import java.util.List;
+
 import sk.upjs.vma.formativ.R;
+import sk.upjs.vma.formativ.entity.Otazka;
 import sk.upjs.vma.formativ.entity.Pouzivatel;
 import sk.upjs.vma.formativ.entity.Seria;
+import sk.upjs.vma.formativ.entity.UspesnostSerie;
 import sk.upjs.vma.formativ.prihlasenie.LoginActivity;
 
 public class PrehladUcitelActivity extends AppCompatActivity implements KliknutieSeriaListener{
 
     private Pouzivatel pouzivatel;
-    private int idPouzivatela = 1;
-    private static final String KEY_POUZIVATEL = "pouzivatel";
+    private Seria seria;
+    private int idPouzivatela;
+    private boolean upravaSerie = false;
+    private static final String KEY_POUZIVATEL = "Pouzivatel";
+    private static final String KEY_SERIA = "Seria";
+    private static final String KEY_UPRAVA = "Uprava";
+    private ConnectivityManager cm;
+    private ZoznamSeriiUcitelFragment zoznamSeriiUcitelFragment;
+    private DetailSerieUcitelFragment detailSerieUcitelFragment;
+    private DetailNovaSeriaFragment detailNovaSeriaFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +45,39 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
             pouzivatel = (Pouzivatel) getIntent().getSerializableExtra("Pouzivatel");
         }else{
             pouzivatel = (Pouzivatel) savedInstanceState.getSerializable(KEY_POUZIVATEL);
+            seria = (Seria) savedInstanceState.getSerializable(KEY_SERIA);
+            upravaSerie = (Boolean) savedInstanceState.getSerializable(KEY_UPRAVA);
 
         }
         idPouzivatela = pouzivatel.getId();
         if(jeTablet()){
-            ZoznamSeriiUcitelFragment zoznamSeriiUcitelFragment =
-                    (ZoznamSeriiUcitelFragment) getFragmentManager().findFragmentById(R.id.zoznam_serii_fragment);
-            zoznamSeriiUcitelFragment.nastavListenerId(this, idPouzivatela);
+            zoznamSeriiUcitelFragment = (ZoznamSeriiUcitelFragment)
+                    getFragmentManager().findFragmentById(R.id.zoznam_serii_Fragment);
+            zoznamSeriiUcitelFragment.nastavListenerId(this, idPouzivatela, true, upravaSerie, seria);
+
+            if (upravaSerie){
+                uspesnePridanaSeria(this.seria);
+            }else {
+                detailSerieUcitelFragment = new DetailSerieUcitelFragment();
+                getFragmentManager().beginTransaction().replace(R.id.frameLayout, detailSerieUcitelFragment).commit();
+                detailSerieUcitelFragment.nastavListener(this);
+            }
+            //upravaSerie = false;
+            zoznamSeriiUcitelFragment.refresh(upravaSerie);
 
         }else{
-            ZoznamSeriiUcitelFragment zoznamSeriiUcitelFragment =
+            zoznamSeriiUcitelFragment =
                     new ZoznamSeriiUcitelFragment();
-            zoznamSeriiUcitelFragment.nastavListenerId(this, idPouzivatela);
+            zoznamSeriiUcitelFragment.nastavListenerId(this, idPouzivatela, false, upravaSerie, seria);
             getFragmentManager().beginTransaction()
                     .replace(R.id.prehlad_ucitel_activity, zoznamSeriiUcitelFragment).commit();
+            //upravaSerie = false;
+            if (upravaSerie){
+                uspesnePridanaSeria(this.seria);
+            }
         }
 
+        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
     }
 
@@ -59,6 +85,10 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_POUZIVATEL, pouzivatel);
+        if (seria != null){
+            outState.putSerializable(KEY_SERIA, seria);
+        }
+        outState.putSerializable(KEY_UPRAVA, upravaSerie);
     }
 
     public boolean jeTablet(){
@@ -67,13 +97,99 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
 
     @Override
     public void klikSeria(Seria seria) {
-        Toast.makeText(this, seria.getNazov(), Toast.LENGTH_LONG).show();
+        this.seria = seria;
+        if (upravaSerie) {
+            onBackPressed();
+        }
+        UspesnostiAsyncTask uspesnostiAsyncTask = new UspesnostiAsyncTask();
+        uspesnostiAsyncTask.nastavListener(this, seria.getId());
+        uspesnostiAsyncTask.execute();
+    }
+
+    @Override
+    public void uspesnosti(List<UspesnostSerie> uspesnostSeries) {
+        if (upravaSerie){
+            onBackPressed();
+        }
+        if (!jeTablet()){
+            detailSerieUcitelFragment = new DetailSerieUcitelFragment();
+            detailSerieUcitelFragment.nastavListener(this);
+            detailSerieUcitelFragment.nastavSeriu(seria, idPouzivatela, uspesnostSeries);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.prehlad_ucitel_activity,detailSerieUcitelFragment).addToBackStack(null).commit();
+
+        }else{
+            detailSerieUcitelFragment.nastavDetail(seria, idPouzivatela, uspesnostSeries);
+        }
+    }
+
+    @Override
+    public void novaSeria(Seria seria) {
+        if(jeInternet()){
+            SeriaAsyncTask seriaAsyncTask = new SeriaAsyncTask();
+            seriaAsyncTask.nastavListener(this, idPouzivatela);
+            seriaAsyncTask.execute(seria);
+        }else{
+            Toast.makeText(this, "Ziadne internetove pripojenie !", Toast.LENGTH_LONG).show();
+        }
 
     }
 
     @Override
-    public void novaSeria() {
+    public void uspesnePridanaSeria(Seria vystup) {
+        if (vystup != null){
+            this.upravaSerie = true;
+            this.seria = vystup;
+            detailNovaSeriaFragment = new DetailNovaSeriaFragment();
+            detailNovaSeriaFragment.nastavPremennu(vystup, this, idPouzivatela);
+            if(jeTablet()){
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.frameLayout,detailNovaSeriaFragment).addToBackStack(null).commit();
+            }else{
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.prehlad_ucitel_activity,detailNovaSeriaFragment).addToBackStack(null).commit();
+            }
+        }else{
+            Toast.makeText(this, "Seriu sa nepodarilo pridat !", Toast.LENGTH_LONG).show();
+        }
 
+    }
+
+    @Override
+    public void pridajOtazkuDoSerie(Otazka otazka) {
+        if(jeInternet()){
+            PridajOtazkuAsyncTask pridajOtazkuAsyncTask = new PridajOtazkuAsyncTask();
+            pridajOtazkuAsyncTask.nastavListener(this);
+            pridajOtazkuAsyncTask.execute(otazka);
+        }else{
+            Toast.makeText(this, "Ziadne internetove pripojenie !", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (upravaSerie){
+            upravaSerie = false;
+        }
+    }
+
+    @Override
+    public void updateSeria(Seria seria) {
+        upravaSerie = false;
+        if(jeInternet()){
+            UpdateSeriaAsyncTask updateSeriaAsyncTask = new UpdateSeriaAsyncTask();
+            updateSeriaAsyncTask.nastavListener(this, seria);
+            updateSeriaAsyncTask.execute(seria);
+        }else{
+            Toast.makeText(this, "Ziadne internetove pripojenie !", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void pridanaOtazka() {
+        detailNovaSeriaFragment.nacitajOtazky();
     }
 
     @Override
@@ -106,5 +222,13 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private boolean jeInternet() {
+        NetworkInfo activeNetwork = null;
+        if (cm != null) {
+            activeNetwork = cm.getActiveNetworkInfo();
+        }
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

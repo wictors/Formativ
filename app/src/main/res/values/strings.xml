@@ -26,10 +26,17 @@
     <string name="zopakovat_heslo">Zopakovat heslo</string>
     <string name="typ">Typy Pouzivatela</string>
     <string name="registrovat">Registrovat</string>
+    <string name="spustena">Spustena</string>
+    <string name="nazov_serie">Nazov Serie</string>
     <string-array name="typy_pouzivatelov">
         <item>Admin</item>
         <item>Ucitel</item>
         <item>Student</item>
+    </string-array>
+    <string-array name="typy_otazok">
+        <item>Otázka s možnosťami</item>
+        <item>Otázka bez možností</item>
+        <item>Otázka bez hodnotenia</item>
     </string-array>
     <string-array name="pouzivatelia">
         <item>vseno</item>

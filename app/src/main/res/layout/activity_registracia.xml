@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registraciaLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/registraciaLayout"
     tools:context="sk.upjs.vma.formativ.Admin.RegistraciaActivity">
 
 
@@ -20,14 +20,17 @@
 
     <EditText
         android:id="@+id/editTextMeno"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:ems="10"
         android:hint="@string/meno_hint"
         android:inputType="textPersonName"
         android:maxLines="1"
         android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@+id/editTextPriezvisko"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewMeno" />
 
@@ -35,23 +38,25 @@
         android:id="@+id/textViewPriezvisko"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/priezvisko"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextMeno" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextPriezvisko"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/priezvisko"
         android:inputType="textPersonName"
         android:maxLines="1"
         android:singleLine="true"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editTextMeno"
         app:layout_constraintTop_toBottomOf="@+id/textViewPriezvisko" />
 
     <TextView
@@ -59,21 +64,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/heslo_hint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPriezvisko" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextMeno" />
 
     <EditText
         android:id="@+id/editTextHeslo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:ems="10"
         android:hint="@string/heslo_hint"
         android:inputType="textPassword"
         android:maxLines="1"
         android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@+id/editTextZopakovatHeslo"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewHeslo" />
 
@@ -81,41 +89,48 @@
         android:id="@+id/textViewZopakovatHeslo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/zopakovat_heslo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextHeslo" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPriezvisko" />
 
     <EditText
         android:id="@+id/editTextZopakovatHeslo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/heslo_hint"
         android:inputType="textPassword"
         android:maxLines="1"
         android:singleLine="true"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editTextHeslo"
         app:layout_constraintTop_toBottomOf="@+id/textViewZopakovatHeslo" />
 
     <TextView
         android:id="@+id/textViewTyp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/typ"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextZopakovatHeslo" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextHeslo" />
 
     <Spinner
         android:id="@+id/spinnerTyp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:entries="@array/typy_pouzivatelov"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTyp" />
 
