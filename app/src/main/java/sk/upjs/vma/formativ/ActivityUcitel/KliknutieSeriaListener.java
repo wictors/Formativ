@@ -1,5 +1,6 @@
 package sk.upjs.vma.formativ.ActivityUcitel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sk.upjs.vma.formativ.entity.Otazka;
@@ -14,4 +15,8 @@ public interface KliknutieSeriaListener {
     void updateSeria(Seria seria);
     void pridanaOtazka();
     void uspesnosti(List<UspesnostSerie> uspesnostSeries);
+    void updateOtazka(Otazka otazka);
+    void odstranOtazku(Otazka editOtazka);
+    void vymazSerie(ArrayList<Seria> zoznamOznac);
+    void serieZmazane();
 }

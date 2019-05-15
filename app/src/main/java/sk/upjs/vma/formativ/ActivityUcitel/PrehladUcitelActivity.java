@@ -8,11 +8,13 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sk.upjs.vma.formativ.R;
@@ -124,6 +126,28 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
     }
 
     @Override
+    public void updateOtazka(Otazka otazka) {
+        if(jeInternet()){
+            UdateOtazkaAsyncTask udateOtazkaAsyncTask = new UdateOtazkaAsyncTask();
+            udateOtazkaAsyncTask.nastavListener(this);
+            udateOtazkaAsyncTask.execute(otazka);
+        }else{
+            Toast.makeText(this, "Ziadne internetove pripojenie !", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void odstranOtazku(Otazka editOtazka) {
+        if (jeInternet()){
+            ZmazOtazkaAsyncTask zmazOtazkaAsyncTask = new ZmazOtazkaAsyncTask();
+            zmazOtazkaAsyncTask.nastavListener(this);
+            zmazOtazkaAsyncTask.execute(editOtazka);
+        }else {
+            Toast.makeText(this, "Ziadne internetove pripojenie !", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public void novaSeria(Seria seria) {
         if(jeInternet()){
             SeriaAsyncTask seriaAsyncTask = new SeriaAsyncTask();
@@ -230,5 +254,18 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
             activeNetwork = cm.getActiveNetworkInfo();
         }
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void vymazSerie(ArrayList<Seria> zoznamOznac) {
+        Log.d("ZMAZANA SERIA: ", Integer.toString(zoznamOznac.size()));
+        ZmazSerieAsyncTask zmazSerieAsyncTask = new ZmazSerieAsyncTask();
+        zmazSerieAsyncTask.nastavListener(this, zoznamOznac);
+        zmazSerieAsyncTask.execute();
+    }
+
+    @Override
+    public void serieZmazane() {
+        zoznamSeriiUcitelFragment.refresh(upravaSerie);
     }
 }

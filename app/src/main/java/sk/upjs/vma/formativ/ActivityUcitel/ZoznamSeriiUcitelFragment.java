@@ -10,21 +10,30 @@ import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sk.upjs.vma.formativ.R;
 import sk.upjs.vma.formativ.SerieListLoader;
 import sk.upjs.vma.formativ.entity.Seria;
+
+import static sk.upjs.vma.formativ.R.id.ranklabel;
 
 
 public class ZoznamSeriiUcitelFragment extends Fragment
@@ -41,6 +50,7 @@ public class ZoznamSeriiUcitelFragment extends Fragment
     private boolean uprava;
     private Seria seria;
     private boolean prvykrat;
+    private ArrayList<Seria> zoznamOznac = new ArrayList<>();
 
 
     public ZoznamSeriiUcitelFragment() {
@@ -64,8 +74,51 @@ public class ZoznamSeriiUcitelFragment extends Fragment
         context = view.getContext();
 
         listView = view.findViewById(R.id.zoznam_serii_list);
-        listAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        listAdapter = new ArrayAdapter<Seria>(context,R.layout.listseria_item,R.id.ranklabel);
         listView.setAdapter(listAdapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                // Capture total checked items
+                final int checkedCount = listView.getCheckedItemCount();
+                actionMode.setTitle("Vybrané: " + checkedCount);
+                if (b) {
+                    zoznamOznac.add(listAdapter.getItem(i));
+                }else{
+                    zoznamOznac.remove(listAdapter.getItem(i));
+                }
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                actionMode.getMenuInflater().inflate(R.menu.multiple_delete_menu, menu);
+                zoznamOznac.clear();
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.delete:
+                        listener.vymazSerie(zoznamOznac);
+                        actionMode.finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+            }
+        });
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
