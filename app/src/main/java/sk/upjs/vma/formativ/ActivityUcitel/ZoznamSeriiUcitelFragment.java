@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
@@ -14,8 +15,10 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +36,7 @@ import sk.upjs.vma.formativ.R;
 import sk.upjs.vma.formativ.SerieListLoader;
 import sk.upjs.vma.formativ.entity.Seria;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import static sk.upjs.vma.formativ.R.id.ranklabel;
 
 
@@ -51,6 +55,7 @@ public class ZoznamSeriiUcitelFragment extends Fragment
     private Seria seria;
     private boolean prvykrat;
     private ArrayList<Seria> zoznamOznac = new ArrayList<>();
+    private View view;
 
 
     public ZoznamSeriiUcitelFragment() {
@@ -70,7 +75,7 @@ public class ZoznamSeriiUcitelFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_zoznam_serii_ucitel, container, false);
+        view = inflater.inflate(R.layout.fragment_zoznam_serii_ucitel, container, false);
         context = view.getContext();
 
         listView = view.findViewById(R.id.zoznam_serii_list);
@@ -144,10 +149,12 @@ public class ZoznamSeriiUcitelFragment extends Fragment
         return view;
     }
 
+
     private void novaSeria() {
         pridanieSerieDialog = new Dialog(context);
         pridanieSerieDialog.setTitle("Nová Séria");
         pridanieSerieDialog.setContentView(R.layout.nova_seria_dialog);
+
         final Switch spustenaSwitch = (Switch) pridanieSerieDialog.findViewById(R.id.nova_seria_dialog_switch);
         final EditText nazovSeriePole = (EditText) pridanieSerieDialog.findViewById(R.id.nova_seria_dialog_edittext);
         Button pridaj = (Button) pridanieSerieDialog.findViewById(R.id.nova_seria_dialog_button_pridaj);
@@ -229,8 +236,9 @@ public class ZoznamSeriiUcitelFragment extends Fragment
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void refresh(boolean uprava){
-        onRefresh();
+    public void refresh(boolean uprava, Seria seria){
+        this.seria = seria;
         this.uprava = uprava;
+        onRefresh();
     }
 }

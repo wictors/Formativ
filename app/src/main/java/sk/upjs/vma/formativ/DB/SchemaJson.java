@@ -65,4 +65,7 @@ public interface SchemaJson {
 
     @POST("zmazSerie.php")
     Call<Boolean> vymazSerie(@Query("idecko") int seria);
+
+    @GET("odpovedeUcitelovi.php")
+    Call<List<Odpoved>> dajOdpovedeUcitelovi(@Query("otazka") int id);
 }

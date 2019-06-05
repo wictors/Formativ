@@ -56,6 +56,7 @@ public class Prehlad_Student extends AppCompatActivity implements KliknutieSeria
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prehlad__student);
+        setTitle("Formativ Student");
 
         if(savedInstanceState == null) {
             pouzivatel = (Pouzivatel) getIntent().getSerializableExtra("Pouzivatel");
@@ -299,9 +300,12 @@ public class Prehlad_Student extends AppCompatActivity implements KliknutieSeria
         int pocetOdpovedi = odpovede.size();
         Log.d("ODPOVEDE", "Pocet: " + odpovede.size());
         int spravne = 0;
+        int bezHodnotenia = 0;
         for (Odpoved odpoved: odpovede){
             if (odpoved.getSpravnost().equals("ano")){spravne++;}
+            if (odpoved.getSpravnost().equals("odp")){bezHodnotenia++;}
         }
+        pocetOdpovedi -= bezHodnotenia;
         double vysledok = (double) spravne/pocetOdpovedi;
         vysledok = vysledok*100;
         int percento = (int) vysledok;

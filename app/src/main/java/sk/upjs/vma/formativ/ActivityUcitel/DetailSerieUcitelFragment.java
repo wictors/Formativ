@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -109,6 +110,13 @@ public class DetailSerieUcitelFragment extends Fragment
         zoznamOtazokDetail_ListView = view.findViewById(R.id.zoznamOtazokDetail_listView);
         listAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
         zoznamOtazokDetail_ListView.setAdapter(listAdapter);
+        zoznamOtazokDetail_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Otazka otazka = (Otazka) adapterView.getAdapter().getItem(i);
+                listener.ukazOdpovede(otazka);
+            }
+        });
 
         id_TextView = (TextView) view.findViewById(R.id.ID_textView);
         nazovSerie_TextView = (TextView) view.findViewById(R.id.nazovSerie_TextView);

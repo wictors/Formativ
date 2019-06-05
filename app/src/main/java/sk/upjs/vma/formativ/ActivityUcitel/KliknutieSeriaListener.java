@@ -19,4 +19,5 @@ public interface KliknutieSeriaListener {
     void odstranOtazku(Otazka editOtazka);
     void vymazSerie(ArrayList<Seria> zoznamOznac);
     void serieZmazane();
+    void ukazOdpovede(Otazka otazka);
 }

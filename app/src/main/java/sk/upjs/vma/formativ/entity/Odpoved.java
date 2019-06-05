@@ -11,6 +11,9 @@ public class Odpoved implements Serializable {
     private String odpoved;
     private String spravnost;
 
+    public Odpoved() {
+    }
+
     public Odpoved(int id_otazka, int id_pouzivatel, String odpoved, String spravnost){
         this.id_otazka = id_otazka;
         this.id_pouzivatel = id_pouzivatel;
@@ -60,11 +63,6 @@ public class Odpoved implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(id_otazka);
-        builder.append(id_pouzivatel);
-        builder.append(odpoved);
-        builder.append(spravnost);
-        return builder.toString();
+        return odpoved;
     }
 }

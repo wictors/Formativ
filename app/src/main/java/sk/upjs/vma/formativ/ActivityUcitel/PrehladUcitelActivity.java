@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -43,6 +46,15 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prehlad_ucitel);
 
+        findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
+
         if(savedInstanceState == null) {
             pouzivatel = (Pouzivatel) getIntent().getSerializableExtra("Pouzivatel");
         }else{
@@ -53,6 +65,7 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
         }
         idPouzivatela = pouzivatel.getId();
         if(jeTablet()){
+
             zoznamSeriiUcitelFragment = (ZoznamSeriiUcitelFragment)
                     getFragmentManager().findFragmentById(R.id.zoznam_serii_Fragment);
             zoznamSeriiUcitelFragment.nastavListenerId(this, idPouzivatela, true, upravaSerie, seria);
@@ -65,7 +78,7 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
                 detailSerieUcitelFragment.nastavListener(this);
             }
             //upravaSerie = false;
-            zoznamSeriiUcitelFragment.refresh(upravaSerie);
+            zoznamSeriiUcitelFragment.refresh(upravaSerie, seria);
 
         }else{
             zoznamSeriiUcitelFragment =
@@ -84,6 +97,15 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        pouzivatel = (Pouzivatel) savedInstanceState.getSerializable(KEY_POUZIVATEL);
+        seria = (Seria) savedInstanceState.getSerializable(KEY_SERIA);
+        upravaSerie = (Boolean) savedInstanceState.getSerializable(KEY_UPRAVA);
+
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_POUZIVATEL, pouzivatel);
@@ -95,6 +117,13 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
 
     public boolean jeTablet(){
         return findViewById(R.id.prehlad_ucitel_activity) == null;
+    }
+
+    @Override
+    public void ukazOdpovede(Otazka otazka) {
+        Intent intent = new Intent(PrehladUcitelActivity.this, PrehladOtazkaActivity.class);
+        intent.putExtra("Otazka", otazka);
+        startActivity(intent);
     }
 
     @Override
@@ -258,14 +287,24 @@ public class PrehladUcitelActivity extends AppCompatActivity implements Kliknuti
 
     @Override
     public void vymazSerie(ArrayList<Seria> zoznamOznac) {
-        Log.d("ZMAZANA SERIA: ", Integer.toString(zoznamOznac.size()));
+        if (obsahuje(zoznamOznac)){
+            Log.d("ZMAZANA SERIA: ", "Pasujeee :D");
+            seria = null;
+        }
         ZmazSerieAsyncTask zmazSerieAsyncTask = new ZmazSerieAsyncTask();
         zmazSerieAsyncTask.nastavListener(this, zoznamOznac);
         zmazSerieAsyncTask.execute();
     }
 
+    private boolean obsahuje(ArrayList<Seria> zoznamOznac) {
+        for (Seria seria: zoznamOznac){
+            if (seria.equals(this.seria)){ return true; }
+        }
+        return false;
+    }
+
     @Override
     public void serieZmazane() {
-        zoznamSeriiUcitelFragment.refresh(upravaSerie);
+        zoznamSeriiUcitelFragment.refresh(upravaSerie, seria);
     }
 }

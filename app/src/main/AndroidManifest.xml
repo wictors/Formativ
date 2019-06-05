@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.upjs.vma.formativ">
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!-- To auto-complete the email text field in the login form with the user's emails
+    android:parentActivityName=".ActivityUcitel.PrehladUcitelActivity" -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -27,7 +28,7 @@
         <activity android:name=".ActivityUcitel.PrehladUcitelActivity" />
         <activity android:name=".Admin.RegistraciaActivity" />
         <activity android:name=".Admin.PrehladAdminActivity" />
-        <activity android:name=".ActivityStudent.Prehlad_Student"></activity>
+        <activity android:name=".ActivityStudent.Prehlad_Student" />
+        <activity android:name=".ActivityUcitel.PrehladOtazkaActivity"></activity>
     </application>
-
 </manifest>

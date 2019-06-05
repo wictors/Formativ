@@ -80,7 +80,7 @@ public class SpatnaVazbaFragment extends Fragment {
         }
         Odpoved odpoved;
 
-        odpoved = new Odpoved(otazka.getId(), idPouzivatel, odpovd, "ano" );
+        odpoved = new Odpoved(otazka.getId(), idPouzivatel, odpovd, "odp" );
 
         listener.odpovedam(odpoved);
     }

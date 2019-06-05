@@ -8,6 +8,9 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import sk.upjs.vma.formativ.R;
 import sk.upjs.vma.formativ.entity.Pouzivatel;
@@ -20,16 +23,35 @@ public class PrehladAdminActivity extends AppCompatActivity implements Kliknutie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prehlad_admin);
 
+
         if(jeTablet()){
             ZoznamPouzivatelovAdminFragment zoznamPouzivatelovAdminFragment =
                     (ZoznamPouzivatelovAdminFragment) getFragmentManager().findFragmentById(R.id.zoznam_pouzivatelov_admin_fragment);
             zoznamPouzivatelovAdminFragment.setListener(this);
+            findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    return true;
+                }
+            });
+
         }else{
             ZoznamPouzivatelovAdminFragment zoznamPouzivatelovAdminFragment =
                     new ZoznamPouzivatelovAdminFragment();
             zoznamPouzivatelovAdminFragment.setListener(this);
             getFragmentManager().beginTransaction()
                     .replace(R.id.prehlad_admin_activity, zoznamPouzivatelovAdminFragment).commit();
+
+            findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    return true;
+                }
+            });
         }
     }
 

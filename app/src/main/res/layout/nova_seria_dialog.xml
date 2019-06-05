@@ -6,7 +6,9 @@
     android:id="@+id/nova_seria_dialog"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable = "true"
+    android:clickable = "true">
 
     <EditText
         android:id="@+id/nova_seria_dialog_edittext"
